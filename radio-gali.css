@@ -86,7 +86,7 @@ button{font:inherit;cursor:pointer}
 .quote blockquote{color:var(--rg-ink)!important;letter-spacing:-.035em!important}
 .quote small,.footer{color:var(--rg-muted)!important}
 .footer{border-color:var(--rg-line)!important;line-height:1.7!important}
-.player{background:#211c19b8!important;backdrop-filter:blur(7px)!important}
+.player#player{background:#211c19b8!important;backdrop-filter:blur(7px)!important}
 .player-card{background:var(--rg-surface)!important;color:var(--rg-ink)!important;border:1px solid var(--rg-line)!important;border-radius:24px!important;box-shadow:0 24px 80px #211c1933!important}
 .player-card h2{color:var(--rg-ink)!important}
 .player-card p{color:var(--rg-muted)!important}
@@ -177,3 +177,22 @@ header,main,footer{position:relative}
   .radio-scene,.scene{height:255px!important;min-height:255px!important}
   .scene-label{font-size:8px!important;letter-spacing:.8px!important}
 }
+
+/* Motion system */
+#rg-page-transition{position:fixed;inset:0;z-index:99999;pointer-events:none;background:#28221d;opacity:1;transition:opacity .42s cubic-bezier(.22,.8,.22,1)}
+#rg-page-transition.rg-transition-out{opacity:0}
+#rg-page-transition.rg-transition-in{opacity:1;pointer-events:all}
+.rg-reveal{opacity:0;transform:translateY(16px);transition:opacity .6s cubic-bezier(.22,.8,.25,1),transform .6s cubic-bezier(.22,.8,.25,1)}
+.rg-reveal.rg-visible{opacity:1;transform:translateY(0)}
+body.night{--rg-paper:#211d1a;--rg-surface:#2d2722;--rg-ink:#f6eee2;--rg-muted:#c1b3a2;--rg-line:#4a4036;--rg-rust:#d87c65;--rg-gold:#d6b36c;--rg-forest:#3d5946;background:var(--rg-paper)!important;color:var(--rg-ink)!important}
+body.night .topbar,body.night .footer,body.night .ticker{border-color:var(--rg-line)!important}
+body.night .brand-name,body.night .hero h1,body.night .section-head h2,body.night .station h3,body.night .quote blockquote,body.night .map-controls h3,body.night .map-controls strong,body.night .journey-player h3{color:var(--rg-ink)!important}
+body.night .brand-mark,body.night .icon-btn,body.night .station,body.night .station-search,body.night .journey-player,body.night .player-card{background:var(--rg-surface)!important;color:var(--rg-ink)!important;border-color:var(--rg-line)!important}
+body.night .station-emoji,body.night .station-play,body.night .player-close{background:#40362c!important;color:var(--rg-ink)!important}
+body.night .station p,body.night .hero-copy,body.night .section-head p,body.night .map-note,body.night .scene-status small,body.night .journey-player p,body.night .journey-caption,body.night .quote small{color:var(--rg-muted)!important}
+body.night .radio-scene{background:#3c3227!important;border-color:#5b4938!important}
+body.night .map-panel{background:#2c342c!important;border-color:var(--rg-line)!important}
+body.night .map-controls{color:var(--rg-ink)!important}
+body.night .scene-chip{background:#352f28!important;color:var(--rg-ink)!important;border-color:var(--rg-line)!important}
+body.night .scene-chip.active{background:var(--rg-forest)!important}
+@media(prefers-reduced-motion:reduce){#rg-page-transition,.rg-reveal{transition:none!important}.rg-reveal{opacity:1;transform:none}}
