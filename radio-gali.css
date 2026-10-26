@@ -196,3 +196,63 @@ body.night .map-controls{color:var(--rg-ink)!important}
 body.night .scene-chip{background:#352f28!important;color:var(--rg-ink)!important;border-color:var(--rg-line)!important}
 body.night .scene-chip.active{background:var(--rg-forest)!important}
 @media(prefers-reduced-motion:reduce){#rg-page-transition,.rg-reveal{transition:none!important}.rg-reveal{opacity:1;transform:none}}
+
+/* Legacy decorative overlays are replaced by the new quieter motion system */
+#gali-atmosphere,#gali-vignette,#gali-transition{display:none!important}
+.gali-glow{animation:none!important;text-shadow:none!important;filter:none!important}
+/* Ritu Radio keeps its animated sky as a signature scene */
+body:has(#world){--rg-ink:#fff7e9;--rg-muted:#e2d5c3;--rg-rust:#e9b75f;--rg-surface:#fffaf2;--rg-line:#ffffff35;color:var(--rg-ink)!important}
+body:has(#world) main{color:var(--rg-ink)!important}
+body:has(#world) .hero h1{color:#fff7e9!important;text-shadow:0 5px 22px #1c171233!important}
+body:has(#world) .hero .eyebrow,body:has(#world) .subtitle{color:#f3d9a6!important}
+body:has(#world) .brand{color:#fff7e9!important}
+body:has(#world) .mark{border-radius:14px!important;background:#e9b75f!important;color:#2b2117!important}
+body:has(#world) .clock,body:has(#world) .tiny,body:has(#world) .hint{color:#fff7e9!important}
+body:has(#world) .season{background:#fffaf2!important;color:#35291f!important;border:1px solid #e8d7be!important;backdrop-filter:none!important;box-shadow:none!important}
+body:has(#world) .season[aria-pressed=true]{background:#304c3b!important;color:#fffaf2!important;border-color:#304c3b!important}
+body:has(#world) .player{background:#fffaf2!important;color:#28221d!important;border:1px solid #e0d2bd!important;backdrop-filter:none!important;box-shadow:0 16px 45px #101a1c35!important}
+body:has(#world) .track b{color:#28221d!important}
+body:has(#world) .track small{color:#766a5e!important;opacity:1}
+body:has(#world) .controls button{background:#eee1cd!important;color:#28221d!important}
+body:has(#world) .controls .play{background:#304c3b!important;color:#fffaf2!important}
+/* Jugaad workshop and cassette rooms */
+body:has(.floaters){--rg-accent:var(--rg-rust)}
+body:has(.floaters) .grain,body:has(.floaters) .floaters{opacity:.16!important;pointer-events:none}
+body:has(.floaters) header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--rg-line)}
+body:has(.floaters) header .back{display:inline-flex;align-items:center;min-height:42px;padding:10px 15px;border:1px solid var(--rg-line);border-radius:999px;color:var(--rg-ink)!important;text-decoration:none;background:var(--rg-surface)}
+body:has(.floaters) .pill{background:#eadcc7!important;color:#76502d!important;border:1px solid #dfc9a9!important;border-radius:999px!important;padding:9px 12px!important;font-size:9px!important;letter-spacing:1.3px!important}
+body:has(.floaters) .hero{grid-template-columns:1fr .9fr!important;text-align:left!important;gap:clamp(24px,5vw,60px)!important;padding:clamp(40px,7vw,85px) 0 38px!important}
+body:has(.floaters) .hero h1{font-size:clamp(48px,7.4vw,88px)!important;color:var(--rg-ink)!important;line-height:.98!important;text-shadow:none!important}
+body:has(.floaters) .hero p{color:var(--rg-muted)!important;font-size:15px!important;line-height:1.8!important;max-width:520px}
+body:has(.floaters) .eyebrow{color:var(--rg-rust)!important;letter-spacing:2.3px!important}
+body:has(.floaters) .controls button{min-height:46px!important;padding:12px 17px!important;border-radius:999px!important;background:var(--rg-surface)!important;color:var(--rg-ink)!important;border:1px solid var(--rg-line)!important}
+body:has(.floaters) .controls button.primary{background:var(--rg-forest)!important;color:#fffaf2!important;border-color:var(--rg-forest)!important}
+body:has(.floaters) .status{color:var(--rg-rust)!important;font-size:10px!important;letter-spacing:1.3px!important}
+body:has(.floaters) .art{min-height:310px!important;border-radius:24px!important;background:radial-gradient(circle at 50% 45%,#e5c28c,#eadcc6 65%,#dfc9aa)!important;border:1px solid #ddc6a5!important;box-shadow:var(--rg-shadow)!important}
+body:has(.floaters) .orb{background:radial-gradient(circle at 35% 30%,#fff3d7,#c99a4c 65%,#a74735)!important;box-shadow:none!important}
+body:has(.floaters) .rings{border-color:#a7473540!important;box-shadow:0 0 0 20px #a747350a,0 0 0 40px #a7473508!important}
+body:has(.floaters) .emoji{filter:drop-shadow(0 12px 12px #50351e22)!important}
+body:has(.floaters) .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 20px}
+body:has(.floaters) .card{background:var(--rg-surface)!important;color:var(--rg-ink)!important;border:1px solid var(--rg-line)!important;border-radius:16px!important;padding:18px!important;box-shadow:none!important}
+body:has(.floaters) .card b{display:block;color:var(--rg-rust)!important;font-size:9px!important;letter-spacing:1.4px!important;margin-bottom:8px}
+body:has(.floaters) .player{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;background:var(--rg-surface)!important;color:var(--rg-ink)!important;border:1px solid var(--rg-line)!important;border-radius:20px!important;padding:22px!important;box-shadow:var(--rg-shadow)!important}
+body:has(.floaters) .player h2{color:var(--rg-ink)!important;font-size:clamp(20px,3vw,30px)!important;letter-spacing:-.04em}
+body:has(.floaters) .player p{color:var(--rg-muted)!important;line-height:1.75!important;font-size:13px!important}
+body:has(.floaters) .player .controls{display:flex;flex-wrap:wrap;justify-content:flex-end}
+body:has(.floaters) .meter{background:#e7dccb!important;border-radius:999px!important;overflow:hidden}
+body:has(.floaters) .meter span{background:var(--rg-rust)!important}
+body:has(.floaters) footer{border-top:1px solid var(--rg-line);margin-top:26px;padding:20px 0;color:var(--rg-muted)!important;font-size:11px}
+body:has(.floaters) footer a{color:var(--rg-rust)!important}
+@media(max-width:760px){
+ body:has(.floaters) .hero{grid-template-columns:minmax(0,1fr)!important;padding:34px 0 26px!important}
+ body:has(.floaters) .art{min-height:240px!important}
+ body:has(.floaters) .cards{grid-template-columns:1fr!important;gap:9px!important}
+ body:has(.floaters) .card{padding:14px!important}
+ body:has(.floaters) .player{grid-template-columns:minmax(0,1fr)!important;padding:17px!important}
+ body:has(.floaters) .player .controls{justify-content:flex-start}
+ body:has(#world) main{padding:16px 14px 28px!important}
+ body:has(#world) .season-picker{gap:8px!important}
+ body:has(#world) .season{padding:10px 12px!important;font-size:12px!important}
+ body:has(#world) .hero{padding-top:25px!important}
+ body:has(#world) .player{padding:14px!important;gap:10px!important}
+}
