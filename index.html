@@ -174,6 +174,95 @@ body.night .map-stamp{background:#2d2724;color:#f6eee2;border-color:#49403a}
 body.night .player-controls .outline{background:#2d2724;color:#f6eee2;border-color:#49403a}
 body.night .footer{border-color:#49403a}
 @media(max-width:760px){.hero{padding-top:42px}.hero h1{letter-spacing:-1.8px}.radio-scene{border-radius:20px}.station{border-radius:16px}.station-grid{gap:13px}}
+
+/* Mobile-first polish */
+@media(max-width:760px){
+  html,body{width:100%;overflow-x:hidden}
+  .shell{width:100%;max-width:100%;padding-left:16px;padding-right:16px}
+  .topbar{padding:14px 0;gap:10px}
+  .brand{min-width:0;gap:9px}
+  .brand-mark{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center}
+  .brand-name{font-size:22px;line-height:1.1}
+  .brand-sub{font-size:9px;letter-spacing:1px;line-height:1.4}
+  .top-actions{gap:8px}
+  .icon-btn{width:42px;height:42px;min-width:42px}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding:38px 0 34px}
+  .hero>div:first-child{min-width:0}
+  .hero h1{font-size:clamp(46px,12.5vw,66px);line-height:1.02;letter-spacing:-1.6px;margin:15px 0}
+  .hero-copy{font-size:15px;line-height:1.7;max-width:100%}
+  .hero-buttons{display:grid;grid-template-columns:1fr;gap:10px;margin-top:21px}
+  .hero-buttons .btn{width:100%;min-height:48px;padding:13px 15px}
+  .hero-note{line-height:1.6}
+  .hero-pills{display:flex;flex-wrap:wrap;gap:7px}
+  .hero-pills span{font-size:9px;padding:7px 9px}
+  .radio-scene{width:100%;min-height:285px;height:285px;border-radius:18px}
+  .shop-sign{top:20px;left:17px;font-size:13px;padding:8px 11px}
+  .sun{right:24px;top:24px;width:54px;height:54px}
+  .radio{width:min(78%,300px);height:172px;padding:13px;border-width:4px}
+  .speaker{width:clamp(78px,26vw,102px);height:clamp(78px,26vw,102px);border-width:4px}
+  .dial{width:45px;height:45px;border-width:4px}
+  .sticker{left:16px;bottom:36px;padding:8px 10px;font-size:10px}
+  .radio-foot{bottom:13px;font-size:9px;letter-spacing:1.2px}
+  .caption{bottom:13px;right:12px;font-size:8px}
+  .ticker{padding:11px 0;font-size:10px}
+  .ticker span{margin:0 14px}
+  .section{padding:42px 0}
+  .section-head{display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:18px;align-items:start}
+  .section-head h2{font-size:clamp(29px,8vw,38px);line-height:1.12}
+  .section-head p{font-size:13px;line-height:1.65;margin:0}
+  .station-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:15px}
+  .station-search{width:100%;min-width:0;min-height:46px;padding:12px}
+  .station-count{font-size:10px}
+  .station-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .station{position:relative;min-width:0;min-height:205px;padding:14px 12px;border-radius:15px}
+  .station h3{font-size:clamp(16px,4.4vw,20px);line-height:1.15;overflow-wrap:anywhere}
+  .station p{font-size:11px;line-height:1.45}
+  .station-emoji{font-size:27px}
+  .station-play{min-width:34px;min-height:34px}
+  .how{padding:22px 18px;border-radius:18px}
+  .how h2{font-size:clamp(28px,8vw,36px);line-height:1.15}
+  .step{padding:12px 0}
+  .journey-section{padding-top:18px}
+  .journey-layout{grid-template-columns:minmax(0,1fr);gap:12px}
+  .journey-sky{height:205px}
+  .journey-player{padding:14px}
+  .journey-player iframe{width:100%;height:300px}
+  .journey-meta h3{font-size:21px}
+  .music-grid{grid-template-columns:minmax(0,1fr);gap:13px}
+  .music-card{min-width:0;padding:14px}
+  .music-card iframe{display:block;width:100%;height:240px}
+  .map-panel{grid-template-columns:minmax(0,1fr);gap:0;overflow:hidden}
+  .map-controls{min-width:0;padding:16px}
+  .map-controls select{width:100%;min-height:44px}
+  .scene-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .scene-chip{min-height:39px;padding:8px 5px;font-size:12px}
+  .scene-status{margin-top:12px}
+  .map-frame,.map-frame iframe{width:100%;min-width:0;min-height:270px;height:270px}
+  .quote{padding:38px 0 46px}
+  .quote blockquote{font-size:clamp(25px,7vw,34px);line-height:1.35}
+  .footer{padding:25px 0;font-size:12px;line-height:1.7}
+  .player-card{width:calc(100vw - 24px);max-width:100%;padding:15px;border-radius:18px}
+  .player-controls{gap:9px;flex-wrap:wrap}
+  .player-controls button{min-height:42px}
+  .volume{max-width:100%}
+}
+@media(max-width:390px){
+  .shell{padding-left:12px;padding-right:12px}
+  .brand-name{font-size:19px}
+  .brand-sub{font-size:8px;letter-spacing:.7px}
+  .top-actions{gap:5px}
+  .icon-btn{width:38px;height:38px;min-width:38px}
+  .hero h1{font-size:clamp(43px,12vw,52px)}
+  .radio-scene{height:260px;min-height:260px}
+  .radio{width:82%;height:155px}
+  .station-grid{gap:8px}
+  .station{padding:12px 10px;min-height:195px}
+  .station h3{font-size:16px}
+  .station p{font-size:10px}
+  .scene-chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .journey-player iframe{height:260px}
+}
+@media(hover:none){.station:hover,.btn:hover{transform:none;box-shadow:inherit}}
 </style>
 
 </head>
