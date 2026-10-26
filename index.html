@@ -76,6 +76,15 @@ body.night{--paper:#130f1b;--paper2:#20182a;--ink:#fff5ff;--muted:#c0afca;--gree
 body.night .hero-pills span{background:#261b32;color:#f8dfff;border-color:#493451}
 @media(max-width:760px){.hero{padding-top:42px}.radio-scene{min-height:310px}.brand-name{font-size:24px}.station{border-radius:15px}.station h3{font-size:21px}}
 
+
+/* Radio Gali immersive background artwork: home */
+html{background:var(--bg,var(--paper,#111))}
+body{position:relative;isolation:isolate}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(180deg,rgba(10,8,20,.68),rgba(10,8,20,.80)),url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2200&q=85");background-size:cover;background-position:center;background-attachment:fixed;opacity:.48}
+body.night:after{opacity:.32}
+@media(max-width:760px){body:after{background-attachment:scroll;background-position:center;background-size:cover;opacity:.34}}
+@media(prefers-reduced-motion:reduce){body:after{background-attachment:scroll}}
+
 </style>
 <style id="gali-cinema-css">html{scroll-behavior:smooth}a,button{transition:transform .35s cubic-bezier(.22,.8,.22,1),filter .35s,box-shadow .35s}a:hover,button:hover{filter:brightness(1.12)}button:active,a:active{transform:scale(.97)}#gali-atmosphere{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;opacity:.65;mix-blend-mode:screen}#gali-vignette{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.16) 100%)}#gali-transition{position:fixed;inset:0;background:#0a0b12;z-index:9999;pointer-events:none;opacity:0;transition:opacity .42s}#gali-transition.active{opacity:1}#gali-weather-control{position:fixed;right:16px;bottom:16px;z-index:50;display:flex;gap:7px;align-items:center;padding:7px 10px;border:1px solid #ffffff28;border-radius:999px;background:#111827c9;color:#fff;backdrop-filter:blur(18px);font:600 12px system-ui}#gali-weather-control button{border:0;border-radius:999px;background:#ffffff18;color:white;padding:8px 11px;cursor:pointer;font:inherit}@keyframes gali-glow{from{filter:drop-shadow(0 0 3px #ffd16b22)}to{filter:drop-shadow(0 0 14px #ffd16b55)}}h1{animation:gali-glow 4s ease-in-out infinite alternate}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}</style></head>
 <body>
