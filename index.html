@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>हमारा मोहल्ला – Din se raat tak ki vibes</title>
+<meta name="description" content="Ek mohalla, nau vibes: saloon, truck, bus, platform, barat, exam night, cafe aur club. Bas tap karo aur sun lo.">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--s1:#7fc4ec;--s2:#fbe3b0;--ink:#1d1a22;--road:#3b3b44}
+body[data-mode=night]{--s1:#0c0e2e;--s2:#3a2060;--ink:#f3eefc;--road:#14141c}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:"Baloo 2","Noto Sans Devanagari",Arial,sans-serif;color:var(--ink);background:linear-gradient(var(--s1),var(--s2));background-attachment:fixed;transition:background .6s;line-height:1.4}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid #ffd23f;outline-offset:3px}
+.wrap{max-width:62rem;margin:0 auto;padding:1.25rem}
+header{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+h1{font-size:clamp(2rem,7vw,3.6rem);font-weight:800;margin:0;line-height:1.05}
+.sub{margin:.25rem 0 0;opacity:.8}
+#tg{border:2px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:.4rem 1.1rem;font-weight:700}
+#street{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:1rem;margin:2.5rem 0 0;align-items:end}
+.spot{position:relative;border:0;color:#fff;text-align:center;padding:1.8rem .6rem 1rem;border-radius:.4rem .4rem .2rem .2rem;background:linear-gradient(160deg,var(--a),var(--b));text-shadow:0 1px 3px #0008;box-shadow:0 .5rem 0 #0003;transition:transform .15s}
+.spot:hover{transform:translateY(-.4rem)}
+.spot .roof{position:absolute;left:-.4rem;right:-.4rem;top:-.7rem;height:.9rem;background:var(--a);filter:brightness(.7);border-radius:.5rem .5rem 0 0}
+.spot .em{display:block;font-size:2.8rem;line-height:1.2}
+.spot strong{display:block;font-size:1.15rem}
+.spot small{opacity:.9}
+.road{height:3.2rem;margin:.8rem -1.25rem 0;background:var(--road);position:relative;overflow:hidden;border-top:.35rem solid #0003}
+.road::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:3px dashed #fff8}
+.road span{position:absolute;top:.2rem;font-size:1.8rem;animation:go 14s linear infinite}
+@keyframes go{from{left:-3rem}to{left:100%}}
+.tip{margin:2rem 0;text-align:center}
+.tip a,.tip button{display:inline-block;margin:.3rem;padding:.5rem 1.2rem;border-radius:999px;border:2px solid currentColor;color:inherit;background:transparent;text-decoration:none;font-weight:700}
+footer{text-align:center;opacity:.7;font-size:.9rem;padding-bottom:2rem}
+#stage{position:fixed;inset:0;z-index:9;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;padding:1.5rem;color:#fff;background:linear-gradient(160deg,var(--a),var(--b));overflow:hidden}
+#stage.on{display:flex}
+#stage .big{font-size:clamp(5rem,26vw,10rem);line-height:1;animation:sway 3s ease-in-out infinite}
+#stage h2{font-size:clamp(2rem,8vw,3.5rem);margin:0;text-shadow:0 2px 6px #0007}
+#stage p{max-width:30rem;margin:0;font-size:1.2rem;text-shadow:0 1px 4px #0008}
+.row{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;position:relative}
+.row button{background:#fff;color:#222;border:0;border-radius:999px;padding:.6rem 1.4rem;font-weight:800;font-size:1.1rem}
+.row button.ghost{background:transparent;color:#fff;border:2px solid #fff}
+@keyframes sway{50%{transform:rotate(5deg) scale(1.06)}}
+@keyframes pulse{50%{filter:hue-rotate(60deg) brightness(1.5)}}
+#stage.pulse{animation:pulse .5s steps(2) infinite}
+#stage.rain::before{content:"";position:absolute;inset:-50% 0 0;background:repeating-linear-gradient(100deg,transparent 0 14px,#fff4 14px 15px);animation:fall .5s linear infinite}
+@keyframes fall{to{transform:translate(-10px,60px)}}
+@media (prefers-reduced-motion:reduce){#stage .big,.road span,#stage.pulse,#stage.rain::before{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>हमारा मोहल्ला</h1>
+      <p class="sub">Ek gali, nau vibes. Kisi bhi dukaan par tap karo, aur sunte jao.</p>
+    </div>
+    <button id="tg" aria-live="polite"></button>
+  </header>
+  <main>
+    <div id="street" role="list"></div>
+    <div class="road" aria-hidden="true"><span>🛺</span></div>
+  </main>
+  <div class="tip">
+    <!-- Apni UPI ID yahan badlo: YOURUPI@bank -->
+    <a href="upi://pay?pa=YOURUPI@bank&pn=Hamara%20Mohalla&cu=INR">☕ Chai pila do (UPI)</a>
+    <button id="sh">📤 Dost ko bhejo</button>
+  </div>
+  <footer>Saari awaazein browser mein hi banti hain. Koi gaana host nahi hota. Headphones laga lo.</footer>
+</div>
+
+<section id="stage" aria-live="polite">
+  <div class="big" id="sE"></div>
+  <h2 id="sN"></h2>
+  <p id="sL"></p>
+  <div class="row">
+    <button id="pp">⏸ Pause</button>
+    <button id="ac"></button>
+    <button id="bk" class="ghost">← Mohalla</button>
+  </div>
+</section>
+
+<script>
+const SPOTS=[
+{id:'saloon',t:'day',e:'💈',hi:'डीलक्स सैलून',en:'Deluxe Saloon',l:'Kainchi ki khat-khat, purana radio, aur “bhaiya thoda chhota rakhna”.',c:['#7a1f1f','#e9a23b'],ac:'✂️ Ek aur snip'},
+{id:'truck',t:'day',e:'🚚',hi:'ट्रक ड्राइवर',en:'Truck Driver',l:'Highway, dhaba aur engine ki ghurghur. Peeche likha hai: “Buri nazar waale…”',c:['#2b5d34','#e8b923'],ac:'📣 Horn bajao'},
+{id:'bus',t:'day',e:'🚌',hi:'बस ड्राइवर',en:'Bus Driver',l:'Khidki wali seat, 90s ke gaane aur “horn ok pleaseee”.',c:['#b5451b','#f2a65a'],ac:'📣 Horn ok please'},
+{id:'platform',t:'day',e:'🚉',hi:'रेलवे प्लेटफ़ॉर्म',en:'Railway Platform',l:'Chai-chai, bheed aur train ki dhak-dhak. “Yatri kripya dhyan dein.”',c:['#2c4a6e','#9cc3d5'],ac:'🔔 Announcement'},
+{id:'barat',t:'night',e:'🎺',hi:'शादी की बारात',en:'Shaadi Barat',l:'Dhol, ghodi aur chachu ka dance. Aaj raat nachna padega.',c:['#8e1b4a','#f6b93b'],ac:'🥁 Dhol roll',fx:'pulse'},
+{id:'baratbus',t:'night',e:'🚐',hi:'बारात बस',en:'Barat Bus',l:'Baraatiyon se bhari bus, speaker full volume, sabka mood on.',c:['#5a1a7a','#ff7ab6'],ac:'🥁 Dhol roll'},
+{id:'exam',t:'night',e:'📚',hi:'एग्ज़ाम नाइट',en:'Exam Night',l:'Raat ke 2 baje, baarish, aur syllabus abhi bhi aadha baaki.',c:['#10213f','#4b6cb7'],ac:'📞 Mummy ka call',fx:'rain'},
+{id:'cafe',t:'night',e:'☕',hi:'कैफ़े',en:'Cafe',l:'Halki roshni, dheemi gupshup, ek cold coffee aur lamba time.',c:['#4a2c1a','#c08a5a'],ac:'🥂 Order karo'},
+{id:'club',t:'night',e:'🪩',hi:'नाइट क्लब',en:'Night Club',l:'Bass full, lights on, aaj koi ghar nahi jayega.',c:['#1b0b3f','#ff2bd6'],ac:'💥 Drop!',fx:'pulse'}
+];
+
+/* ---------- awaaz (Web Audio) ---------- */
+let ctx,master,nb,live=[],tm,idx=0,nxt=0,cur=null,paused=false;
+const R=n=>Math.floor(Math.random()*n),SC=[0,1,4,5,7,8,10,12];
+function init(){
+  if(!ctx){
+    ctx=new(window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain();master.gain.value=.8;master.connect(ctx.destination);
+    nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+    const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  }
+  if(ctx.state=='suspended')ctx.resume();
+}
+function tone(f,t,d,ty,g){const o=ctx.createOscillator(),a=ctx.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.0008,t+d);o.connect(a).connect(master);o.start(t);o.stop(t+d+.05)}
+function kick(t,g){const o=ctx.createOscillator(),a=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(a).connect(master);o.start(t);o.stop(t+.3)}
+function click(t,g,f){const s=ctx.createBufferSource(),b=ctx.createBiquadFilter(),a=ctx.createGain();s.buffer=nb;b.type='bandpass';b.frequency.value=f||3000;a.gain.setValueAtTime(g,t);a.gain.exponentialRampToValueAtTime(.001,t+.07);s.connect(b).connect(a).connect(master);s.start(t,Math.random(),.12)}
+function mel(base,t,d,ty,g){tone(base*2**(SC[R(8)]/12),t,d,ty,g)}
+const roll=(t)=>{for(let j=0;j<10;j++)kick(t+j*.07,.7-j*.04)};
+const bAt=(i,t)=>{const k=i%16;if([0,3,6,8,11,14].includes(k))kick(t,.9);if(k==4||k==12){click(t,.6,1500);click(t+.05,.4,1500)}if(i%4==0)mel(293,t,.35,'sawtooth',.05)};
+const horn=(t)=>{tone(440,t,.25,'square',.12);tone(440,t+.35,.45,'square',.12)};
+const E={
+saloon:{L:[['d',95,'sawtooth',300,.025],['h',2500,1,.03]],s:.22,p(i,t){if(i%6==0){click(t,.5,5000);click(t+.09,.4,5000)}if(i%16==0)mel(262,t,.6,'triangle',.12)},a(t){[0,.1,.2].forEach(x=>click(t+x,.7,5000))}},
+truck:{L:[['d',48,'sawtooth',150,.1],['d',72,'square',120,.03]],s:.5,p(i,t){if(i%4==0)kick(t,.2);if(i%16==8)mel(196,t,.8,'triangle',.08)},a(t){tone(247,t,1,'sawtooth',.18);tone(311,t,1,'sawtooth',.14)}},
+bus:{L:[['d',58,'sawtooth',200,.08],['h',1200,.5,.02]],s:.3,p(i,t){if(i%2==0)kick(t,.12);if(i%8==0)mel(330,t,.4,'sawtooth',.05)},a:horn},
+platform:{L:[['h',700,.5,.06],['d',70,'sawtooth',120,.03]],s:.4,p(i,t){if(i%2==0)click(t,.18,1800);if(i%40==6)this.a(t)},a(t){tone(659,t,1.2,'sine',.2);tone(523,t+.5,1.5,'sine',.2)}},
+barat:{L:[],s:.15,p:bAt,a:roll},
+baratbus:{L:[['d',58,'sawtooth',180,.07]],s:.15,p:bAt,a:roll},
+exam:{L:[['h',1800,.6,.14],['d',50,'sine',100,.04]],s:1,p(i,t){click(t,.35,i%2?2500:1800)},a(t){for(let j=0;j<4;j++){tone(880,t+j*.5,.2,'sine',.2);tone(660,t+j*.5+.2,.2,'sine',.2)}}},
+cafe:{L:[['h',900,.8,.06],['d',130,'sine',300,.03]],s:.6,p(i,t){if(i%4==0)tone(220*2**(SC[R(4)]/12),t,2,'triangle',.07);if(i%7==3)tone(2400+R(600),t,.2,'sine',.04)},a(t){tone(2600,t,.3,'sine',.12);tone(3100,t+.15,.3,'sine',.1)}},
+club:{L:[],s:.12,p(i,t){const k=i%16;if(k%4==0)kick(t,.9);if(k%4==2)click(t,.3,8000);if([3,6,10,14].includes(k))tone(55*2**(SC[k%3]/12),t,.18,'sawtooth',.12)},a(t){for(let j=0;j<16;j++){kick(t+j*.06,.6);click(t+j*.06,.15+j*.01,8000)}}}
+};
+function build(L){L.forEach(([k,f,x,y,g])=>{let s,out;
+  if(k=='d'){s=ctx.createOscillator();s.type=x;s.frequency.value=f;const lp=ctx.createBiquadFilter();lp.frequency.value=y;s.connect(lp);out=lp}
+  else{s=ctx.createBufferSource();s.buffer=nb;s.loop=true;const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f;bp.Q.value=x;s.connect(bp);out=bp;g=y}
+  const a=ctx.createGain();a.gain.value=g;out.connect(a).connect(master);s.start();live.push(s)})}
+function stopAll(){clearInterval(tm);live.forEach(n=>{try{n.stop()}catch(e){}});live=[]}
+function play(id){
+  init();stopAll();const e=E[id];build(e.L);idx=0;nxt=ctx.currentTime+.1;paused=false;
+  tm=setInterval(()=>{while(nxt<ctx.currentTime+.25){e.p(idx,nxt);nxt+=e.s;idx++}},50);
+}
+
+/* ---------- mohalla UI ---------- */
+const $=s=>document.querySelector(s);
+let mode=(()=>{const h=new Date().getHours();return h>=6&&h<18?'day':'night'})();
+function draw(){
+  document.body.dataset.mode=mode;
+  $('#tg').textContent=mode=='day'?'🌙 Raat karo':'☀️ Din karo';
+  const st=$('#street');st.innerHTML='';
+  SPOTS.filter(s=>s.t==mode).forEach(s=>{
+    const b=document.createElement('button');b.className='spot';b.setAttribute('role','listitem');
+    b.style.setProperty('--a',s.c[0]);b.style.setProperty('--b',s.c[1]);
+    b.innerHTML='<span class="roof"></span><span class="em">'+s.e+'</span><strong>'+s.hi+'</strong><small>'+s.en+'</small>';
+    b.onclick=()=>openS(s);st.append(b);
+  });
+}
+function openS(s){
+  cur=s;const g=$('#stage');
+  g.style.setProperty('--a',s.c[0]);g.style.setProperty('--b',s.c[1]);
+  g.className='on '+(s.fx||'');
+  $('#sE').textContent=s.e;$('#sN').textContent=s.hi;$('#sL').textContent=s.l;
+  $('#ac').textContent=s.ac;$('#pp').textContent='⏸ Pause';
+  play(s.id);$('#bk').focus();
+}
+function closeS(){stopAll();cur=null;$('#stage').className=''}
+$('#tg').onclick=()=>{mode=mode=='day'?'night':'day';draw()};
+$('#bk').onclick=closeS;
+$('#ac').onclick=()=>{if(cur){init();E[cur.id].a(ctx.currentTime+.02)}};
+$('#pp').onclick=()=>{if(!cur)return;paused=!paused;if(paused){stopAll();$('#pp').textContent='▶ Play'}else{play(cur.id);$('#pp').textContent='⏸ Pause'}};
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&cur)closeS()});
+$('#sh').onclick=async()=>{
+  const d={title:'हमारा मोहल्ला',text:'Ek gali, nau vibes. Sunke dekho.',url:location.href};
+  try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(location.href);$('#sh').textContent='✅ Link copy ho gaya'}}catch(e){}
+};
+draw();
+</script>
+</body>
+</html>
