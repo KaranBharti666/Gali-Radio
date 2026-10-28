@@ -28,93 +28,220 @@
   function makePlayer(label) {
     const root = document.createElement("section");
     root.className = "drive-radio";
-    root.setAttribute("aria-label", `${label} Google Drive song player`);
+    root.setAttribute("aria-label", `${label} song player`);
 
+    const head = document.createElement("div");
+    head.className = "drive-radio-head";
+    const identity = document.createElement("div");
+    identity.className = "drive-radio-identity";
+    const disc = document.createElement("span");
+    disc.className = "drive-radio-disc";
+    disc.setAttribute("aria-hidden", "true");
+    disc.textContent = "♫";
     const heading = document.createElement("div");
-    heading.className = "drive-radio-heading";
-    const title = document.createElement("strong");
-    title.textContent = `${label} · Google Drive songs`;
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "drive-radio-eyebrow";
+    eyebrow.textContent = "RADIO GALI · DRIVE STREAM";
+    const name = document.createElement("strong");
+    name.className = "drive-radio-name";
+    name.textContent = label;
+    heading.append(eyebrow, name);
+    identity.append(disc, heading);
     const count = document.createElement("span");
     count.className = "drive-radio-count";
-    count.textContent = "Gaane load ho rahe hain…";
-    heading.append(title, count);
+    count.textContent = "Loading…";
+    head.append(identity, count);
 
     const search = document.createElement("input");
     search.className = "drive-radio-search";
     search.type = "search";
-    search.placeholder = "Gaana ya artist dhoondo";
+    search.placeholder = "Search all songs or artists";
     search.setAttribute("aria-label", `${label} songs search`);
+
+    const now = document.createElement("div");
+    now.className = "drive-radio-now";
+    const nowLabel = document.createElement("span");
+    nowLabel.className = "drive-radio-now-label";
+    nowLabel.textContent = "NOW PLAYING";
+    const currentTitle = document.createElement("strong");
+    currentTitle.className = "drive-radio-current-title";
+    currentTitle.textContent = "Choose a song to start";
+    const currentArtist = document.createElement("span");
+    currentArtist.className = "drive-radio-current-artist";
+    currentArtist.textContent = "Your full song library is below";
+    now.append(nowLabel, currentTitle, currentArtist);
 
     const audio = document.createElement("audio");
     audio.className = "drive-radio-audio";
-    audio.controls = true;
     audio.preload = "none";
-    audio.setAttribute("aria-label", `${label} song playback controls`);
+    audio.setAttribute("aria-label", `${label} song stream`);
+
+    const seekRow = document.createElement("div");
+    seekRow.className = "drive-radio-seek-row";
+    const elapsed = document.createElement("span");
+    elapsed.textContent = "0:00";
+    const seek = document.createElement("input");
+    seek.className = "drive-radio-seek";
+    seek.type = "range";
+    seek.min = "0";
+    seek.max = "1000";
+    seek.value = "0";
+    seek.setAttribute("aria-label", "Seek through current song");
+    const duration = document.createElement("span");
+    duration.textContent = "0:00";
+    seekRow.append(elapsed, seek, duration);
+
+    const controls = document.createElement("div");
+    controls.className = "drive-radio-controls";
+    const previous = document.createElement("button");
+    previous.type = "button";
+    previous.className = "drive-radio-skip";
+    previous.setAttribute("aria-label", "Previous song");
+    previous.textContent = "⏮";
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "drive-radio-toggle";
+    toggle.setAttribute("aria-label", "Play song");
+    toggle.textContent = "▶";
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "drive-radio-skip";
+    next.setAttribute("aria-label", "Next song");
+    next.textContent = "⏭";
+    const volumeWrap = document.createElement("label");
+    volumeWrap.className = "drive-radio-volume";
+    volumeWrap.setAttribute("aria-label", "Volume");
+    const volumeIcon = document.createElement("span");
+    volumeIcon.textContent = "◖";
+    const volume = document.createElement("input");
+    volume.type = "range";
+    volume.min = "0";
+    volume.max = "1";
+    volume.step = "0.01";
+    volume.value = "0.75";
+    volume.setAttribute("aria-label", "Volume");
+    volumeWrap.append(volumeIcon, volume);
+    controls.append(previous, toggle, next, volumeWrap);
 
     const status = document.createElement("p");
     status.className = "drive-radio-status";
     status.setAttribute("role", "status");
-    status.textContent = "Drive se songs list aa rahi hai…";
+    status.textContent = "Gaane load ho rahe hain…";
 
+    const queueHead = document.createElement("div");
+    queueHead.className = "drive-radio-queue-head";
+    const queueTitle = document.createElement("strong");
+    queueTitle.textContent = "YOUR LIBRARY";
+    const queueCount = document.createElement("span");
+    queueHead.append(queueTitle, queueCount);
     const list = document.createElement("ul");
     list.className = "drive-radio-list";
     list.setAttribute("aria-label", `${label} songs`);
 
-    root.append(heading, search, audio, status, list);
+    root.append(head, search, now, audio, seekRow, controls, status, queueHead, list);
 
     let allSongs = [];
     let activeSongId = "";
+    let visibleSongs = [];
+    const songKey = (song) => song.id || song.streamUrl;
+    const formatTime = (seconds) => {
+      if (!Number.isFinite(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      return `${mins}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
+    };
 
     function playSong(song) {
       document.querySelectorAll(".drive-radio-audio").forEach((otherAudio) => {
         if (otherAudio !== audio) otherAudio.pause();
       });
-      activeSongId = song.id || song.streamUrl;
+      activeSongId = songKey(song);
       audio.src = song.streamUrl;
-      status.textContent = `Abhi baj raha hai · ${song.title}`;
+      currentTitle.textContent = song.title;
+      currentArtist.textContent = song.artist || song.album || "Google Drive stream";
+      status.textContent = `Streaming · ${song.title}`;
+      toggle.textContent = "Ⅱ";
+      toggle.setAttribute("aria-label", "Pause song");
       void audio.play().catch(() => {
-        status.textContent = "Gaana play nahi hua. Dobara Play dabao.";
+        status.textContent = "Stream start nahi hua. Play dobara dabao.";
+        toggle.textContent = "▶";
+        toggle.setAttribute("aria-label", "Play song");
       });
       renderList();
     }
 
     function renderList() {
       const query = search.value.trim().toLocaleLowerCase();
-      const matches = allSongs.filter((song) => song.title.toLocaleLowerCase().includes(query));
+      visibleSongs = allSongs.filter((song) => `${song.title} ${song.artist || ""}`.toLocaleLowerCase().includes(query));
       list.replaceChildren();
-      matches.forEach((song) => {
+      visibleSongs.forEach((song, index) => {
         const item = document.createElement("li");
         const button = document.createElement("button");
         button.type = "button";
         button.className = "drive-radio-track";
-        button.setAttribute("aria-current", String((song.id || song.streamUrl) === activeSongId));
-        button.textContent = song.title;
+        const number = document.createElement("span");
+        number.className = "drive-radio-track-number";
+        number.textContent = songKey(song) === activeSongId && !audio.paused ? "♫" : String(index + 1).padStart(2, "0");
+        const trackInfo = document.createElement("span");
+        trackInfo.className = "drive-radio-track-info";
+        const trackName = document.createElement("strong");
+        trackName.textContent = song.title;
+        const artist = document.createElement("small");
+        artist.textContent = song.artist || "Tap to stream";
+        trackInfo.append(trackName, artist);
+        const playIcon = document.createElement("span");
+        playIcon.className = "drive-radio-track-play";
+        playIcon.textContent = songKey(song) === activeSongId && !audio.paused ? "Ⅱ" : "▶";
+        button.setAttribute("aria-current", String(songKey(song) === activeSongId));
+        button.append(number, trackInfo, playIcon);
         button.addEventListener("click", () => playSong(song));
         item.append(button);
         list.append(item);
       });
-
+      queueCount.textContent = query ? `${visibleSongs.length} FOUND` : `${allSongs.length} TRACKS`;
+      count.textContent = allSongs.length ? `${allSongs.length} songs` : "Loading…";
       if (!allSongs.length) return;
-      count.textContent = `${allSongs.length} gaane · ${label}`;
-      if (!matches.length) status.textContent = "Is naam se koi gaana nahi mila.";
-      else if (!audio.paused && activeSongId) {
-        const currentSong = allSongs.find((song) => (song.id || song.streamUrl) === activeSongId);
-        status.textContent = currentSong ? `Abhi baj raha hai · ${currentSong.title}` : `${matches.length} gaane mile · gaana chunein.`;
-      } else status.textContent = `${matches.length} gaane mile · gaana chunein ya player use karein.`;
+      if (!visibleSongs.length) status.textContent = "Is naam se koi gaana nahi mila.";
+      else if (audio.paused) status.textContent = `${visibleSongs.length} gaane · kisi bhi track par tap karo.`;
     }
 
-    search.addEventListener("input", () => {
+    function playAtOffset(offset) {
+      if (!allSongs.length) return;
+      const current = allSongs.findIndex((song) => songKey(song) === activeSongId);
+      const nextIndex = current < 0 ? (offset < 0 ? allSongs.length - 1 : 0) : (current + offset + allSongs.length) % allSongs.length;
+      playSong(allSongs[nextIndex]);
+    }
+
+    search.addEventListener("input", renderList);
+    toggle.addEventListener("click", () => {
+      if (!audio.src) return playAtOffset(1);
+      if (audio.paused) void audio.play().catch(() => {});
+      else audio.pause();
+    });
+    previous.addEventListener("click", () => playAtOffset(-1));
+    next.addEventListener("click", () => playAtOffset(1));
+    volume.addEventListener("input", () => { audio.volume = Number(volume.value); });
+    seek.addEventListener("input", () => {
+      if (Number.isFinite(audio.duration)) audio.currentTime = (Number(seek.value) / 1000) * audio.duration;
+    });
+    audio.volume = Number(volume.value);
+    audio.addEventListener("play", () => {
+      toggle.textContent = "Ⅱ";
+      toggle.setAttribute("aria-label", "Pause song");
+      status.textContent = `Streaming · ${currentTitle.textContent}`;
       renderList();
     });
-    audio.addEventListener("play", () => {
-      document.querySelectorAll(".drive-radio-audio").forEach((otherAudio) => {
-        if (otherAudio !== audio) otherAudio.pause();
-      });
+    audio.addEventListener("pause", () => {
+      toggle.textContent = "▶";
+      toggle.setAttribute("aria-label", "Play song");
+      renderList();
     });
-    audio.addEventListener("ended", () => {
-      const currentIndex = allSongs.findIndex((song) => (song.id || song.streamUrl) === activeSongId);
-      if (currentIndex >= 0 && allSongs.length > 1) playSong(allSongs[(currentIndex + 1) % allSongs.length]);
+    audio.addEventListener("timeupdate", () => {
+      elapsed.textContent = formatTime(audio.currentTime);
+      duration.textContent = formatTime(audio.duration);
+      if (Number.isFinite(audio.duration) && audio.duration > 0) seek.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
     });
+    audio.addEventListener("ended", () => playAtOffset(1));
+    audio.addEventListener("error", () => { status.textContent = "Ye stream abhi unavailable hai. Koi aur gaana chunein."; });
 
     getSongs()
       .then((songs) => {
@@ -122,8 +249,8 @@
         renderList();
       })
       .catch(() => {
-        count.textContent = "Songs load nahi hue";
-        status.textContent = "Drive songs API se connect nahi hua. Page refresh karke phir try karein.";
+        count.textContent = "Unavailable";
+        status.textContent = "Drive library load nahi hui. Page refresh karke phir try karein.";
       });
 
     function playSelected(selector) {
@@ -131,96 +258,59 @@
         allSongs = songs;
         renderList();
         const song = selector(songs);
-        if (!song) return;
-        if ((song.id || song.streamUrl) === activeSongId && audio.src) {
-          void audio.play().catch(() => {
-            status.textContent = "Gaana resume nahi hua. Player par Play dabao.";
-          });
-        } else playSong(song);
+        if (song) playSong(song);
       };
       if (allSongs.length) startPlayback(allSongs);
       else {
-        status.textContent = "Songs aa rahe hain…";
+        status.textContent = "Drive library load ho rahi hai…";
         getSongs().then(startPlayback).catch(() => {
-          status.textContent = "Drive songs load nahi hue. Refresh karke phir try karein.";
+          status.textContent = "Drive library load nahi hui. Refresh karke phir try karein.";
         });
       }
     }
-
     root.playFirst = () => playSelected((songs) => songs[0]);
     root.playRandom = () => playSelected((songs) => songs[Math.floor(Math.random() * songs.length)]);
-
     return root;
-  }
-
-  function addPanel(grid, label) {
-    const panel = document.createElement("article");
-    panel.className = "panel drive-radio-panel";
-    const eyebrow = document.createElement("div");
-    eyebrow.className = "tag";
-    eyebrow.textContent = "ON THE SPEAKERS";
-    const heading = document.createElement("h2");
-    heading.textContent = "Google Drive playlist";
-    const description = document.createElement("p");
-    description.textContent = `${label} ke songs yahin search karke play karo.`;
-    panel.append(eyebrow, heading, description, makePlayer(label));
-    grid.append(panel);
   }
 
   function mount() {
     const label = stationLabel();
-    const embeds = [...document.querySelectorAll('iframe[src*="open.spotify.com/embed"]')];
-    let hasStationPlayer = false;
+    const stationEmbed = document.querySelector("#player #stationMusic");
+    if (stationEmbed) {
+      const musicSlot = stationEmbed.closest(".music-player") || stationEmbed.parentElement;
+      musicSlot.replaceChildren(makePlayer(label));
+    }
 
-    embeds.forEach((embed) => {
-      if (embed.id === "stationMusic") {
-        const host = embed.closest(".music-player");
-        if (!host) return;
-        host.append(makePlayer(label));
-        hasStationPlayer = true;
-        return;
-      }
-
-      const journey = embed.closest(".journey-player");
-      if (journey) return;
-
-      const panel = embed.closest(".panel");
-      if (panel) {
-        panel.append(makePlayer(label));
-        hasStationPlayer = true;
+    const pageEmbeds = [...document.querySelectorAll('main iframe[src*="open.spotify.com/embed"]')]
+      .filter((embed) => !embed.closest(".journey-player") && embed.id !== "stationMusic");
+    pageEmbeds.forEach((embed) => {
+      const slot = embed.closest(".panel") || embed.parentElement;
+      if (slot) {
+        embed.replaceWith(makePlayer(label));
+        const heading = slot.querySelector("h2");
+        const description = slot.querySelector("p");
+        if (heading) heading.textContent = "Full song library";
+        if (description) description.textContent = "Apna gaana dhoondo aur isi player se stream karo.";
       }
     });
 
-    if (!hasStationPlayer && !document.querySelector(".drive-radio")) {
-      const container = document.querySelector("main .grid") || document.querySelector("main");
-      if (container) addPanel(container, label);
-    }
-
     document.querySelectorAll("#start, #play").forEach((startButton) => {
       startButton.addEventListener("click", () => {
-        const player = document.querySelector("main .drive-radio") || document.querySelector("#player .drive-radio");
+        const player = document.querySelector("#player .drive-radio") || document.querySelector("main .drive-radio");
         player?.playFirst?.();
       });
     });
 
     const surprise = document.querySelector("#randomStation");
-    if (surprise) {
-      surprise.addEventListener("click", () => {
-        document.querySelector("#player .drive-radio")?.playRandom?.();
-      });
-    }
+    if (surprise) surprise.addEventListener("click", () => document.querySelector("#player .drive-radio")?.playRandom?.());
 
     const modalPause = document.querySelector("#pauseBtn");
-    const modalAudio = document.querySelector("#player .drive-radio-audio");
-    if (modalPause && modalAudio) {
+    if (modalPause) {
       modalPause.addEventListener("click", () => {
-        if (modalAudio.paused && modalAudio.src) void modalAudio.play().catch(() => {});
-        else if (!modalAudio.paused) modalAudio.pause();
+        const modalAudio = document.querySelector("#player .drive-radio-audio");
+        if (modalAudio && !modalAudio.paused) modalAudio.pause();
+        else if (modalAudio?.src) void modalAudio.play().catch(() => {});
       });
-    }
-
-    if (document.querySelector("#player")) {
-      document.querySelector("#player .player-card")?.classList.add("drive-radio-modal-card");
     }
   }
 
