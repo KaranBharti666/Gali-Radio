@@ -1,42 +1,52 @@
-.drive-radio{--dr-bg:rgba(13,18,16,.94);--dr-card:rgba(255,255,255,.055);--dr-line:rgba(255,255,255,.12);--dr-text:#fff8e9;--dr-muted:rgba(255,248,233,.58);--dr-accent:#e2b65d;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin:12px 0 0;padding:18px;border:1px solid var(--dr-line);border-radius:18px;background:radial-gradient(ellipse at 0 0,color-mix(in srgb,var(--dr-accent) 16%,transparent),transparent 48%),linear-gradient(145deg,rgba(255,255,255,.045),transparent 60%),var(--dr-bg);color:var(--dr-text);text-align:left;box-shadow:0 18px 50px rgba(0,0,0,.24);overflow:hidden}
-.drive-radio:before{position:absolute;z-index:-1;inset:0;content:"";pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.035),transparent 70%)}
-.drive-radio-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.drive-radio-identity{display:flex;align-items:center;gap:11px;min-width:0}
-.drive-radio-disc{display:grid;place-items:center;flex:0 0 43px;height:43px;border:1px solid color-mix(in srgb,var(--dr-accent) 52%,transparent);border-radius:50%;background:radial-gradient(circle at 50%,var(--dr-bg) 0 13%,var(--dr-accent) 14% 17%,#111 19% 54%,color-mix(in srgb,var(--dr-accent) 65%,#111) 56% 58%,#111 60%);color:var(--dr-accent);font-size:14px;box-shadow:0 0 24px color-mix(in srgb,var(--dr-accent) 25%,transparent);animation:drive-radio-spin 8s linear infinite paused}
-.drive-radio:has(.drive-radio-toggle[aria-label="Pause song"]) .drive-radio-disc{animation-play-state:running}
+.drive-radio{--dr-bg:#141a18;--dr-card:#202724;--dr-line:#3a4640;--dr-text:#fff8e9;--dr-muted:#b2b8b2;--dr-accent:#e6bd68;box-sizing:border-box;position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%;min-width:0;margin:10px 0 0;padding:15px;border:1px solid var(--dr-line);border-radius:16px;background:linear-gradient(145deg,#242c27 0%,var(--dr-bg) 66%);color:var(--dr-text);text-align:left;box-shadow:0 12px 32px #0003;overflow:hidden}
+.drive-radio *{box-sizing:border-box;min-width:0}
+.drive-radio-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.drive-radio-identity{display:flex;align-items:center;gap:10px}
+.drive-radio-disc{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #e6bd6880;border-radius:50%;background:radial-gradient(circle,#e6bd68 0 10%,#27302b 12% 51%,#e6bd6870 53% 57%,#161b18 59%);color:#f6d790;font-size:14px;animation:drive-radio-spin 9s linear infinite paused}
+.drive-radio.is-playing .drive-radio-disc{animation-play-state:running}
 @keyframes drive-radio-spin{to{transform:rotate(360deg)}}
-.drive-radio-eyebrow,.drive-radio-now-label{display:block;color:var(--dr-accent);font:800 9px/1.4 system-ui,sans-serif;letter-spacing:1.7px}
-.drive-radio-name{display:block;margin-top:3px;color:var(--dr-text);font:700 14px/1.3 system-ui,sans-serif}
+.drive-radio-eyebrow,.drive-radio-now-label{display:block;color:var(--dr-accent);font:800 9px/1.4 system-ui,sans-serif;letter-spacing:1.5px}
+.drive-radio-name{display:block;margin-top:2px;color:var(--dr-text);font:700 13px/1.3 system-ui,sans-serif}
 .drive-radio-count{flex:0 0 auto;color:var(--dr-muted);font:700 10px/1.3 system-ui,sans-serif;text-align:right}
-.drive-radio-search{width:100%;min-width:0;padding:11px 13px;border:1px solid var(--dr-line);border-radius:10px;outline:0;background:rgba(0,0,0,.22);color:var(--dr-text);font:500 12px/1.4 system-ui,sans-serif}
+.drive-radio-search{width:100%;padding:10px 12px;border:1px solid var(--dr-line);border-radius:9px;outline:0;background:#101513;color:var(--dr-text);font:500 12px/1.4 system-ui,sans-serif}
 .drive-radio-search::placeholder{color:var(--dr-muted)}
-.drive-radio-search:focus,.drive-radio-seek:focus-visible,.drive-radio-volume input:focus-visible{border-color:var(--dr-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--dr-accent) 20%,transparent)}
-.drive-radio-now{display:grid;gap:4px;min-width:0;padding:14px;border:1px solid var(--dr-line);border-radius:12px;background:linear-gradient(110deg,color-mix(in srgb,var(--dr-accent) 10%,transparent),transparent 75%),var(--dr-card)}
-.drive-radio-current-title{overflow:hidden;color:var(--dr-text);font:750 15px/1.35 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
-.drive-radio-current-artist{overflow:hidden;color:var(--dr-muted);font:500 11px/1.4 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.drive-radio-search:focus{border-color:var(--dr-accent);box-shadow:0 0 0 2px #e6bd6840}
+.drive-radio-now{display:grid;gap:3px;padding:11px 12px;border:1px solid var(--dr-line);border-radius:10px;background:var(--dr-card)}
+.drive-radio-current-title{overflow:hidden;color:var(--dr-text);font:750 14px/1.35 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.drive-radio-current-artist{overflow:hidden;color:var(--dr-muted);font:500 10px/1.4 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
 .drive-radio-audio{display:none}
-.drive-radio-seek-row{display:grid;grid-template-columns:32px minmax(0,1fr) 32px;align-items:center;gap:8px;color:var(--dr-muted);font:500 9px/1 system-ui,sans-serif}
+.drive-radio-seek-row{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;align-items:center;gap:8px;color:var(--dr-muted);font:500 9px/1 system-ui,sans-serif}
 .drive-radio-seek,.drive-radio-volume input{width:100%;height:4px;margin:0;accent-color:var(--dr-accent);cursor:pointer}
-.drive-radio-seek{min-width:0}
 .drive-radio-seek-row span:last-child{text-align:right}
-.drive-radio-controls{display:flex;align-items:center;justify-content:center;gap:17px}
-.drive-radio-controls button{display:grid;place-items:center;width:36px;height:36px;border:1px solid transparent;border-radius:50%;background:transparent;color:var(--dr-muted);font:700 16px/1 system-ui,sans-serif;cursor:pointer;transition:color .18s,transform .18s,background .18s}
-.drive-radio-controls button:hover{color:var(--dr-text);transform:scale(1.08)}
-.drive-radio-controls .drive-radio-toggle{width:48px;height:48px;border:0;background:var(--dr-accent);color:#17150f;font-size:17px;box-shadow:0 6px 24px color-mix(in srgb,var(--dr-accent) 28%,transparent)}
-.drive-radio-controls .drive-radio-toggle:hover{background:color-mix(in srgb,var(--dr-accent) 86%,white)}
-.drive-radio-volume{display:flex;align-items:center;gap:8px;width:92px;margin-left:8px;color:var(--dr-muted);font:14px system-ui,sans-serif}
-.drive-radio-volume input{width:67px}
-.drive-radio-status{min-height:14px!important;margin:0!important;padding:0!important;color:var(--dr-muted);font:500 10px/1.4 system-ui,sans-serif!important;text-align:center}
-.drive-radio-queue-head{display:flex;align-items:center;justify-content:space-between;padding-top:3px;color:var(--dr-muted);font:800 9px/1.4 system-ui,sans-serif;letter-spacing:1.4px}
+.drive-radio-controls{display:flex;align-items:center;justify-content:center;gap:14px}
+.drive-radio-controls button{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:transparent;color:var(--dr-text);font:700 16px/1 system-ui,sans-serif;cursor:pointer}
+.drive-radio-controls button:hover{background:#ffffff14}
+.drive-radio-controls .drive-radio-toggle{width:48px;height:48px;background:var(--dr-accent);color:#1d1b15;font-size:18px;box-shadow:0 5px 18px #e6bd6833}
+.drive-radio-volume{display:flex;align-items:center;gap:7px;width:92px;margin-left:8px;color:var(--dr-muted);font:14px system-ui,sans-serif}
+.drive-radio-volume input{width:68px}
+.drive-radio-status{min-height:12px!important;margin:0!important;padding:0!important;color:var(--dr-muted);font:500 10px/1.35 system-ui,sans-serif!important;text-align:center}
+.drive-radio-queue-head{display:flex;align-items:center;justify-content:space-between;padding-top:2px;color:var(--dr-muted);font:800 9px/1.4 system-ui,sans-serif;letter-spacing:1.3px}
 .drive-radio-queue-head strong{color:var(--dr-text)}
-.drive-radio-list{display:grid;gap:5px;max-height:235px;margin:0;padding:0 4px 0 0;overflow:auto;overscroll-behavior:contain;list-style:none;scrollbar-color:color-mix(in srgb,var(--dr-accent) 52%,transparent) transparent;scrollbar-width:thin}
-.drive-radio-track{display:grid;grid-template-columns:28px minmax(0,1fr) 24px;align-items:center;gap:9px;width:100%;padding:8px 9px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--dr-text);text-align:left;cursor:pointer;transition:background .18s,border-color .18s}
-.drive-radio-track:hover,.drive-radio-track[aria-current=true]{border-color:var(--dr-line);background:var(--dr-card)}
-.drive-radio-track-number{color:var(--dr-muted);font:600 10px/1 system-ui,sans-serif;text-align:center}
-.drive-radio-track-info{display:grid;gap:3px;min-width:0}
-.drive-radio-track-info strong{overflow:hidden;color:var(--dr-text);font:650 11px/1.3 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
-.drive-radio-track-info small{overflow:hidden;color:var(--dr-muted);font:500 9px/1.3 system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.drive-radio-list{display:grid;gap:3px;max-height:220px;margin:0;padding:0 3px 0 0;overflow:auto;overscroll-behavior:contain;list-style:none;scrollbar-color:#a9905e #222b26;scrollbar-width:thin}
+.drive-radio-track{display:grid;grid-template-columns:25px minmax(0,1fr) 22px;align-items:center;gap:8px;width:100%;padding:7px 8px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--dr-text);text-align:left;cursor:pointer}
+.drive-radio-track:hover,.drive-radio-track[aria-current=true]{border-color:var(--dr-line);background:#ffffff0c}
+.drive-radio-track-number{color:var(--dr-muted);font:600 9px/1 system-ui,sans-serif;text-align:center}
+.drive-radio-track-info{display:grid;gap:2px}
+.drive-radio-track-info strong,.drive-radio-track-info small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drive-radio-track-info strong{color:var(--dr-text);font:650 11px/1.3 system-ui,sans-serif}
+.drive-radio-track-info small{color:var(--dr-muted);font:500 9px/1.3 system-ui,sans-serif}
 .drive-radio-track-play{color:var(--dr-accent);font:700 11px/1 system-ui,sans-serif;text-align:center;opacity:0}
 .drive-radio-track:hover .drive-radio-track-play,.drive-radio-track[aria-current=true] .drive-radio-track-play{opacity:1}
-@media(max-width:600px){.drive-radio{gap:12px;padding:13px;border-radius:14px}.drive-radio-disc{flex-basis:38px;height:38px}.drive-radio-name{font-size:13px}.drive-radio-volume{width:72px;margin-left:2px}.drive-radio-volume input{width:48px}.drive-radio-controls{gap:10px}.drive-radio-list{max-height:205px}}
+.drive-radio-more{width:100%;padding:8px;border:1px solid var(--dr-line);border-radius:8px;background:var(--dr-card);color:var(--dr-text);font:650 10px/1.3 system-ui,sans-serif;cursor:pointer}
+.drive-radio-more[hidden]{display:none}
+.drive-radio-panel .drive-radio{margin-top:12px}
+.music-player .drive-radio{margin-top:0}
+#player .player-card{box-sizing:border-box;width:min(560px,calc(100vw - 28px));max-width:560px;max-height:calc(100dvh - 24px);padding:16px;overflow:hidden}
+#player .live-tag,#player .player-art,#player #playerDesc,#player .visualizer,#player .player-controls,#player .volume{display:none!important}
+#player .player-card>#playerTitle{margin:0 36px 10px 0;font-size:clamp(19px,3vw,25px);line-height:1.25}
+#player .music-player{max-height:calc(100dvh - 86px);min-height:0;margin:0;overflow:hidden}
+#player .drive-radio{max-height:calc(100dvh - 90px);grid-template-rows:auto auto auto auto auto auto auto minmax(80px,1fr) auto;gap:8px;margin:0;padding:12px}
+#player .drive-radio-list{max-height:min(28vh,230px)}
+.drive-radio-modal-card{max-height:calc(100dvh - 24px);overflow:hidden}
+@media(max-width:700px){.drive-radio{gap:9px;padding:12px;border-radius:13px}.drive-radio-disc{flex-basis:34px;width:34px;height:34px}.drive-radio-eyebrow{font-size:8px}.drive-radio-name{font-size:12px}.drive-radio-current-title{font-size:13px}.drive-radio-volume{width:68px;margin-left:2px}.drive-radio-volume input{width:47px}.drive-radio-controls{gap:8px}.drive-radio-list{max-height:185px}#player.player.open{align-items:center;padding:10px}#player .player-card{width:calc(100vw - 20px);max-height:calc(100dvh - 20px);padding:12px;border-radius:17px}#player .player-card>#playerTitle{margin:0 32px 8px 0}#player .drive-radio{max-height:calc(100dvh - 82px);padding:10px;gap:7px}#player .drive-radio-list{max-height:min(24vh,170px)}}
 @media(prefers-reduced-motion:reduce){.drive-radio-disc{animation:none!important}}

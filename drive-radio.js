@@ -1,5 +1,6 @@
 (() => {
   const SONGS_API = "https://radio-songs-api.karanbharti9541.workers.dev/songs";
+  const PAGE_SIZE = 40;
   let songsRequest;
 
   function getSongs() {
@@ -137,12 +138,17 @@
     const list = document.createElement("ul");
     list.className = "drive-radio-list";
     list.setAttribute("aria-label", `${label} songs`);
+    const more = document.createElement("button");
+    more.type = "button";
+    more.className = "drive-radio-more";
+    more.textContent = "Show more songs";
 
-    root.append(head, search, now, audio, seekRow, controls, status, queueHead, list);
+    root.append(head, search, now, audio, seekRow, controls, status, queueHead, list, more);
 
     let allSongs = [];
     let activeSongId = "";
     let visibleSongs = [];
+    let renderLimit = PAGE_SIZE;
     const songKey = (song) => song.id || song.streamUrl;
     const formatTime = (seconds) => {
       if (!Number.isFinite(seconds)) return "0:00";
@@ -173,7 +179,7 @@
       const query = search.value.trim().toLocaleLowerCase();
       visibleSongs = allSongs.filter((song) => `${song.title} ${song.artist || ""}`.toLocaleLowerCase().includes(query));
       list.replaceChildren();
-      visibleSongs.forEach((song, index) => {
+      visibleSongs.slice(0, renderLimit).forEach((song, index) => {
         const item = document.createElement("li");
         const button = document.createElement("button");
         button.type = "button";
@@ -199,6 +205,7 @@
       });
       queueCount.textContent = query ? `${visibleSongs.length} FOUND` : `${allSongs.length} TRACKS`;
       count.textContent = allSongs.length ? `${allSongs.length} songs` : "Loading…";
+      more.hidden = renderLimit >= visibleSongs.length;
       if (!allSongs.length) return;
       if (!visibleSongs.length) status.textContent = "Is naam se koi gaana nahi mila.";
       else if (audio.paused) status.textContent = `${visibleSongs.length} gaane · kisi bhi track par tap karo.`;
@@ -211,7 +218,8 @@
       playSong(allSongs[nextIndex]);
     }
 
-    search.addEventListener("input", renderList);
+    search.addEventListener("input", () => { renderLimit = PAGE_SIZE; renderList(); });
+    more.addEventListener("click", () => { renderLimit += PAGE_SIZE; renderList(); });
     toggle.addEventListener("click", () => {
       if (!audio.src) return playAtOffset(1);
       if (audio.paused) void audio.play().catch(() => {});
@@ -225,12 +233,14 @@
     });
     audio.volume = Number(volume.value);
     audio.addEventListener("play", () => {
+      root.classList.add("is-playing");
       toggle.textContent = "Ⅱ";
       toggle.setAttribute("aria-label", "Pause song");
       status.textContent = `Streaming · ${currentTitle.textContent}`;
       renderList();
     });
     audio.addEventListener("pause", () => {
+      root.classList.remove("is-playing");
       toggle.textContent = "▶";
       toggle.setAttribute("aria-label", "Play song");
       renderList();
@@ -275,10 +285,12 @@
 
   function mount() {
     const label = stationLabel();
+    let hasStationPlayer = false;
     const stationEmbed = document.querySelector("#player #stationMusic");
     if (stationEmbed) {
       const musicSlot = stationEmbed.closest(".music-player") || stationEmbed.parentElement;
       musicSlot.replaceChildren(makePlayer(label));
+      hasStationPlayer = true;
     }
 
     const pageEmbeds = [...document.querySelectorAll('main iframe[src*="open.spotify.com/embed"]')]
@@ -287,12 +299,20 @@
       const slot = embed.closest(".panel") || embed.parentElement;
       if (slot) {
         embed.replaceWith(makePlayer(label));
+        hasStationPlayer = true;
         const heading = slot.querySelector("h2");
         const description = slot.querySelector("p");
         if (heading) heading.textContent = "Full song library";
         if (description) description.textContent = "Apna gaana dhoondo aur isi player se stream karo.";
       }
     });
+
+    if (!hasStationPlayer) {
+      const existingPlayer = document.querySelector("main .player");
+      const player = makePlayer(label);
+      if (existingPlayer) existingPlayer.replaceWith(player);
+      else (document.querySelector("main .grid") || document.querySelector("main"))?.append(player);
+    }
 
     document.querySelectorAll("#start, #play").forEach((startButton) => {
       startButton.addEventListener("click", () => {
@@ -304,6 +324,11 @@
     const surprise = document.querySelector("#randomStation");
     if (surprise) surprise.addEventListener("click", () => document.querySelector("#player .drive-radio")?.playRandom?.());
 
+    const modal = document.querySelector("#player");
+    const stopModalStream = () => document.querySelector("#player .drive-radio-audio")?.pause();
+    document.querySelector("#closePlayer")?.addEventListener("click", stopModalStream);
+    modal?.addEventListener("click", (event) => { if (event.target === modal) stopModalStream(); });
+
     const modalPause = document.querySelector("#pauseBtn");
     if (modalPause) {
       modalPause.addEventListener("click", () => {
@@ -312,6 +337,12 @@
         else if (modalAudio?.src) void modalAudio.play().catch(() => {});
       });
     }
+
+    document.querySelectorAll("#special, #toggle, #effect, #mute, #switch").forEach((button) => button.remove());
+    const legacyControls = document.querySelector("#player .player-controls");
+    if (legacyControls) legacyControls.remove();
+    const legacyVolume = document.querySelector("#player .volume");
+    if (legacyVolume) legacyVolume.remove();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount, { once: true });
