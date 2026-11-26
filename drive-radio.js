@@ -50,7 +50,7 @@
       }
       return { song, score };
     }).filter(item => item.score > 0).sort((a,b) => b.score - a.score);
-    return ranked.length ? ranked.map(item => item.song) : songs;
+    return ranked.map(item => item.song);
   }
 
   function readCachedSongs() {
