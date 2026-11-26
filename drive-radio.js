@@ -218,7 +218,8 @@
     let allSongs = [];
     let activeSongId = "";
     let visibleSongs = [];
-    let renderLimit = PAGE_SIZE;\n    let searchTimer = 0;
+    let renderLimit = PAGE_SIZE;
+    let searchTimer = 0;
     const songKey = (song) => song.id || song.streamUrl;
     const formatTime = (seconds) => {
       if (!Number.isFinite(seconds)) return "0:00";
