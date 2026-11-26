@@ -4,3 +4,73 @@
 .rg-toast{position:fixed;z-index:2000;left:50%;bottom:22px;transform:translate(-50%,18px);width:max-content;max-width:calc(100vw - 32px);padding:12px 16px;border-radius:12px;background:#24251f;color:#fffaf2;font:600 13px/1.45 system-ui,sans-serif;box-shadow:0 12px 36px #0004;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.rg-toast[data-visible="true"]{opacity:1;transform:translate(-50%,0)}.rg-toast[data-kind="error"]{background:#8f302b}
 @media(max-width:760px){.rg-menu-toggle{display:inline-flex}.topbar,.nav,header{position:relative;flex-wrap:wrap;gap:10px}.top-actions{margin-left:auto}.hero{grid-template-columns:minmax(0,1fr)!important;gap:24px!important;padding-top:34px!important}.hero>*,.hero>div{min-width:0;max-width:100%}.hero h1{font-size:clamp(42px,12vw,68px)!important;overflow-wrap:anywhere}.station-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.music-grid,.map-panel,.how{grid-template-columns:minmax(0,1fr)!important}.how{padding:22px!important}.wrap,.shell{padding-left:16px!important;padding-right:16px!important}.nav{height:auto!important;min-height:68px;padding:12px 0!important}.nav .back{margin-left:auto}.scene,.art,.radio-scene{max-width:100%;min-width:0}.drive-radio,.drive-radio-head,.drive-radio-controls{min-width:0;max-width:100%}.drive-radio-controls{flex-wrap:wrap}.drive-radio-volume{max-width:100%}.footer{flex-wrap:wrap;gap:10px}}
 @media(max-width:420px){.station-grid{grid-template-columns:minmax(0,1fr)!important}.brand-name{font-size:21px!important}.rg-mobile-menu[data-open="true"]{grid-template-columns:1fr}.drive-radio-search{min-width:0;width:100%}}
+
+/* Radio Gali visual refresh — station cards, responsive player and modal queue */
+:root{--rg-pink:#e8a6b8;--rg-peach:#f4c7a1;--rg-lilac:#c7b7e8;--rg-mint:#a9cbb9}
+.station-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+.station{min-height:228px!important;border-radius:22px!important;padding:22px!important;background:linear-gradient(145deg,var(--rg-surface,#fffaf2),color-mix(in srgb,var(--rg-pink) 12%,var(--rg-surface,#fffaf2)))!important;box-shadow:0 10px 28px #50351a0b!important}
+.station:nth-child(4n+2){background:linear-gradient(145deg,var(--rg-surface,#fffaf2),#c7b7e82b)!important}
+.station:nth-child(4n+3){background:linear-gradient(145deg,var(--rg-surface,#fffaf2),#a9cbb92b)!important}
+.station:nth-child(4n){background:linear-gradient(145deg,var(--rg-surface,#fffaf2),#f4c7a12e)!important}
+.station:before{width:5px!important;border-radius:0 8px 8px 0;background:linear-gradient(180deg,#d77c9d,#c99a4c)!important}
+.station-emoji{width:54px!important;height:54px!important;border-radius:18px!important;background:#f2e4e8!important;font-size:28px!important;box-shadow:inset 0 0 0 1px #d9a9ba30}
+.station h3{font-size:25px!important;margin-top:23px!important}
+.station p{max-width:88%!important;font-size:12px!important}
+.station-play{width:39px!important;height:39px!important;right:17px!important;top:78px!important;background:#f1e4e9!important;color:#a74765!important;border-color:#e5c8d1!important}
+.station:hover{transform:translateY(-7px) scale(1.01)!important;box-shadow:0 18px 38px #50351a16!important}
+.station-tools{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.station-search{width:min(100%,440px)!important}
+.player#player{z-index:10050!important;padding:clamp(10px,3vw,28px)!important;background:#211b24c9!important}
+.player-card{width:min(900px,100%)!important;max-height:min(94dvh,920px)!important;overflow-y:auto!important;text-align:left!important;padding:clamp(16px,3vw,30px)!important;border-radius:26px!important;background:linear-gradient(145deg,var(--rg-surface,#fffaf2),#f7eaf0)!important}
+.player-card .live-tag{margin:4px 0 12px!important}
+.player-card .player-art{height:105px!important;width:105px!important;float:left!important;margin:0 18px 12px 0!important;border-radius:24px!important;font-size:48px!important}
+.player-card>h2{padding-top:10px!important;font-size:clamp(25px,4vw,38px)!important}
+.player-card>p{min-height:0!important}
+.player-card .visualizer{clear:both;justify-content:flex-start!important;margin:8px 0 12px!important}
+.player-card .music-player{clear:both;margin:10px 0 0!important}
+.drive-radio{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;width:100%!important;min-width:0!important;padding:16px!important;border:1px solid #e2cbd3!important;border-radius:20px!important;background:#fffaf5!important;color:#30242a!important;box-shadow:0 12px 30px #75445712!important}
+.drive-radio-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important}
+.drive-radio-identity{display:flex!important;align-items:center!important;gap:12px!important;min-width:0}
+.drive-radio-disc{display:grid!important;place-items:center!important;width:44px!important;height:44px!important;border-radius:50%!important;background:linear-gradient(135deg,#e7a5b9,#c7b7e8)!important;color:#fff!important;font-size:22px!important;box-shadow:0 5px 16px #bc7c9a30!important}
+.drive-radio-eyebrow{display:block!important;color:#a35d78!important;font-size:9px!important;font-weight:900!important;letter-spacing:1.5px!important}
+.drive-radio-name{display:block!important;color:#30242a!important;font-size:17px!important}
+.drive-radio-count,.drive-radio-queue-head span{font-size:10px!important;color:#987d87!important;font-weight:800!important;white-space:nowrap}
+.drive-radio-search{width:100%!important;min-height:43px!important;padding:10px 14px!important;border:1px solid #ead7de!important;border-radius:13px!important;background:#fff!important;color:#30242a!important}
+.drive-radio-now{display:grid!important;gap:4px!important;padding:15px!important;border-radius:16px!important;background:linear-gradient(120deg,#f8e8ee,#eee9fa)!important}
+.drive-radio-now-label{font-size:9px!important;font-weight:900!important;letter-spacing:1.6px!important;color:#a35d78!important}
+.drive-radio-current-title{font-size:18px!important;color:#30242a!important}
+.drive-radio-current-artist{font-size:11px!important;color:#806b76!important}
+.drive-radio-seek-row{display:flex!important;align-items:center!important;gap:10px!important;color:#8d7480!important;font-size:10px!important}
+.drive-radio-seek,.drive-radio-volume input{min-width:0;accent-color:#b96e8c!important}
+.drive-radio-seek{flex:1!important}
+.drive-radio-controls{display:flex!important;align-items:center!important;justify-content:center!important;gap:12px!important}
+.drive-radio-controls button{border:0!important;cursor:pointer!important}
+.drive-radio-skip{width:42px!important;height:42px!important;border-radius:50%!important;background:#f1e3e9!important;color:#8c4d68!important;font-size:17px!important}
+.drive-radio-toggle{width:54px!important;height:54px!important;border-radius:50%!important;background:linear-gradient(135deg,#b96e8c,#9278b9)!important;color:white!important;font-size:19px!important;box-shadow:0 8px 18px #a86c8c35!important}
+.drive-radio-volume{display:flex!important;align-items:center!important;gap:8px!important;color:#987d87!important;margin-left:12px!important}
+.drive-radio-status{margin:0!important;padding:9px 12px!important;border-radius:10px!important;background:#f7f0f3!important;color:#8b6577!important;font-size:11px!important}
+.drive-radio-queue-head{display:flex!important;align-items:center!important;justify-content:space-between!important;padding-top:6px!important;border-top:1px solid #f0e3e8!important}
+.drive-radio-queue-head strong{font-size:10px!important;letter-spacing:1.4px!important;color:#8b6577!important}
+.drive-radio-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;max-height:230px!important;overflow:auto!important;padding:0!important;margin:0!important;list-style:none!important}
+.drive-radio-list li{min-width:0!important}
+.drive-radio-track{display:flex!important;align-items:center!important;gap:9px!important;width:100%!important;min-height:54px!important;padding:8px 10px!important;border:1px solid #f0e3e8!important;border-radius:12px!important;background:#fff!important;color:#30242a!important;text-align:left!important}
+.drive-radio-track[aria-current="true"]{border-color:#c78aa3!important;background:#fbf0f4!important}
+.drive-radio-track-number{flex:0 0 24px!important;color:#b27c91!important;font-size:10px!important;font-weight:900!important}
+.drive-radio-track-info{display:grid!important;min-width:0!important;gap:3px!important;flex:1!important}
+.drive-radio-track-info strong{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:11px!important}
+.drive-radio-track-info small{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#987d87!important;font-size:9px!important}
+.drive-radio-track-play{color:#a35d78!important;font-size:12px!important}
+.drive-radio-more{justify-self:center!important;padding:10px 16px!important;border:1px solid #e7cbd5!important;border-radius:999px!important;background:#f8edf1!important;color:#925a73!important;font-size:11px!important;font-weight:800!important}
+@media(max-width:760px){
+ .station-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
+ .station{min-height:205px!important;padding:15px!important;border-radius:18px!important}
+ .station h3{font-size:21px!important}
+ .station-emoji{width:45px!important;height:45px!important;font-size:24px!important}
+ .player-card{max-height:96dvh!important;padding:15px!important}
+ .player-card .player-art{width:72px!important;height:72px!important;font-size:34px!important;margin-right:12px!important}
+ .drive-radio{padding:11px!important;gap:10px!important}
+ .drive-radio-list{grid-template-columns:minmax(0,1fr)!important;max-height:31dvh!important}
+ .drive-radio-controls{gap:8px!important;flex-wrap:wrap!important}
+ .drive-radio-volume{width:100%!important;justify-content:center!important;margin:0!important}
+}
+@media(max-width:390px){.station-grid{grid-template-columns:minmax(0,1fr)!important}.station{min-height:180px!important}}
