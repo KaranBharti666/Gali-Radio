@@ -392,7 +392,19 @@
     });
 
     const surprise = document.querySelector("#randomStation");
-    if (surprise) surprise.addEventListener("click", () => document.querySelector("#player .drive-radio")?.playRandom?.());
+    if (surprise) surprise.addEventListener("click", () => {
+      const modal = document.querySelector("#player");
+      const player = modal?.querySelector(".drive-radio");
+      if (!modal || !player) return;
+      const title = document.querySelector("#playerTitle");
+      const desc = document.querySelector("#playerDesc");
+      if (title) title.textContent = "Surprise Mix";
+      if (desc) desc.textContent = "A random track from your Radio Gali library is ready.";
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      player.playRandom?.();
+    });
 
     const modal = document.querySelector("#player");
     const stopModalStream = () => document.querySelector("#player .drive-radio-audio")?.pause();
