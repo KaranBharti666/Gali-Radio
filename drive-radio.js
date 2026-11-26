@@ -1,19 +1,89 @@
 (() => {
   const SONGS_API = "https://radio-songs-api.karanbharti9541.workers.dev/songs";
-  const PAGE_SIZE = 40;
+  const PAGE_SIZE = 24;
+  const SONGS_CACHE_KEY = "radio-gali-song-index-v4";
+  const SONGS_CACHE_TTL = 30 * 60 * 1000;
   let songsRequest;
+
+  const STATION_RULES = {
+    "bus-driver": { folders:["bus driver","bus-driver","highway raat","truck wala","road trip"], words:["highway","truck","bus","safar","musafir","raahi","zindagi ek safar","papa kehte","yeh dosti","ilahi","suhana safar"] },
+    "chai-tapri": { folders:["chai tapri","chai-tapri","tapri","chai"], words:["chai","yaaron","dosti","indipop","o sanam","dooba dooba","purani jeans","alvida","shaam","khoya khoya chand"] },
+    "corporate-majdur": { folders:["corporate majdur","corporate","office","work focus"], words:["lofi","lo-fi","instrumental","acoustic","focus","ambient","piano","soft","calm","chill","no vocals"] },
+    "desi-night-club": { folders:["desi night club","night club","club","party","dance"], words:["dance","party","dhoom","kajra re","dus bahane","where's the party","it's the time to disco","mauja hi mauja","desi girl","aaja nachle","dard-e-disco"] },
+    "exam-night": { folders:["exam night","exam","study","focus","instrumental"], words:["instrumental","lofi","lo-fi","piano","ambient","focus","study","sleep","calm","no vocals","flute","meditation"] },
+    "highway-dhaba": { folders:["highway dhaba","dhaba","punjabi dhaba","highway"], words:["punjabi","bhangra","dhol","dhaba","truck","highway","desi","gaddi","jatt","mustang","patiala","suit suit","brown rang"] },
+    "old-cafe": { folders:["old school cafe","old cafe","retro cafe","evergreen","oldies"], words:["kishore","rafi","mukesh","lata","asha","hemant","manna dey","evergreen","oldies","retro","lag ja gale","pal pal dil ke paas","chura liya"] },
+    "papa-ke-gaane": { folders:["papa ke gaane","papa","family classics"], words:["kishore","rafi","mukesh","lata","asha","mohammed rafi","old is gold","zindagi kaisi","mere sapno ki rani","roop tera mastana","gulabi aankhen","aanewala pal"] },
+    "raju-mistri": { folders:["raju mistri","raju-mistri","mistri","workshop","indipop"], words:["indipop","pop","sukhbir","baba sehgal","daler","lucky ali","bombay vikings","silk route","shaan","salaam namaste","rock","beat","masti"] },
+    "railway-platform": { folders:["railway platform","railway","platform","train journey"], words:["railway","train","platform","safar","musafir","raahi","zindagi ek safar","chhaiya chhaiya","yatra","yaad","ghar kab aaoge","pardesi"] },
+    "rainy-window": { folders:["rainy window","rain","monsoon","baarish","barish"], words:["baarish","barish","rimjhim","bheegi","sawan","saawan","tip tip","bheegi si","geela","rain","mausam","boondein","romantic","ghazal","mellow"] },
+    "ritu-radio": { folders:["ritu radio","ritu","season","monsoon","winter","summer"], words:["mausam","sawan","saawan","baarish","barish","thandi","dhoop","basant","bahaar","winter","summer","monsoon","spring"] },
+    "saloon": { folders:["deluxe saloon","deluxe salon","saloon","salon","barber"], words:["90s","retro","radio","tip tip","chunari","gore gore","ole ole","tan tana tan","sarkai lo","koi mil gaya","saajan","aankh maare"] },
+    "shaadi-baraat": { folders:["shaadi ki baraat","shaadi","baraat","wedding","sangeet"], words:["shaadi","baraat","wedding","dhol","bhangra","mehndi","sangeet","navrai majhi","gallaan goodiyaan","balle balle","mauja hi mauja","morni banke","cutiepie","saajan ji ghar aaye"] }
+  };
+
+  function getStationSlug() {
+    const file = location.pathname.split("/").pop().replace(/\\.html?$/i, "");
+    return file === "index" || !file ? "radio-gali" : file;
+  }
+
+  function normalizeText(value) {
+    return String(value || "").toLocaleLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[_-]+/g, " ").replace(/[^a-z0-9\\s]/g, " ").replace(/\\s+/g, " ").trim();
+  }
+
+  function selectStationSongs(label, songs) {
+    const rule = STATION_RULES[getStationSlug()];
+    if (!rule) return songs;
+    const folderAliases = rule.folders.map(normalizeText);
+    const inStationFolder = songs.filter(song => {
+      const path = normalizeText(song.folderPath || song.folderName || "");
+      return folderAliases.some(alias => path.includes(alias));
+    });
+    if (inStationFolder.length) return inStationFolder;
+
+    const ranked = songs.map(song => {
+      const title = normalizeText([song.title, song.filename, song.folderPath].join(" "));
+      let score = 0;
+      for (const word of rule.words) {
+        const token = normalizeText(word);
+        if (token && title.includes(token)) score += token.includes(" ") ? 4 : 2;
+      }
+      return { song, score };
+    }).filter(item => item.score > 0).sort((a,b) => b.score - a.score);
+    return ranked.length ? ranked.map(item => item.song) : songs;
+  }
+
+  function readCachedSongs() {
+    try {
+      const cached = JSON.parse(localStorage.getItem(SONGS_CACHE_KEY) || "null");
+      if (cached && Array.isArray(cached.songs) && Date.now() - cached.savedAt < SONGS_CACHE_TTL) return cached.songs;
+    } catch (_) {}
+    return null;
+  }
+
+  function fetchSongs() {
+    return fetch(SONGS_API, { cache: "force-cache" })
+      .then(response => {
+        if (!response.ok) throw new Error(`Songs API returned ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        if (!Array.isArray(data.songs)) throw new Error("Songs API response is missing the songs list");
+        const songs = data.songs.filter(song => song && song.title && song.streamUrl);
+        try { localStorage.setItem(SONGS_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), songs })); } catch (_) {}
+        return songs;
+      });
+  }
 
   function getSongs() {
     if (!songsRequest) {
-      songsRequest = fetch(SONGS_API)
-        .then((response) => {
-          if (!response.ok) throw new Error(`Songs API returned ${response.status}`);
-          return response.json();
-        })
-        .then((data) => {
-          if (!Array.isArray(data.songs)) throw new Error("Songs API response is missing the songs list");
-          return data.songs.filter((song) => song && song.title && song.streamUrl);
-        });
+      const cached = readCachedSongs();
+      if (cached) {
+        songsRequest = Promise.resolve(cached);
+        fetchSongs().then(() => {}).catch(() => {});
+      } else {
+        songsRequest = fetchSongs();
+      }
     }
     return songsRequest;
   }
@@ -148,7 +218,7 @@
     let allSongs = [];
     let activeSongId = "";
     let visibleSongs = [];
-    let renderLimit = PAGE_SIZE;
+    let renderLimit = PAGE_SIZE;\n    let searchTimer = 0;
     const songKey = (song) => song.id || song.streamUrl;
     const formatTime = (seconds) => {
       if (!Number.isFinite(seconds)) return "0:00";
@@ -218,7 +288,7 @@
       playSong(allSongs[nextIndex]);
     }
 
-    search.addEventListener("input", () => { renderLimit = PAGE_SIZE; renderList(); });
+    search.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { renderLimit = PAGE_SIZE; renderList(); }, 120); });
     more.addEventListener("click", () => { renderLimit += PAGE_SIZE; renderList(); });
     toggle.addEventListener("click", () => {
       if (!audio.src) return playAtOffset(1);
